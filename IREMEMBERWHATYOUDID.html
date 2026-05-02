@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>???</title>
+
+<style>
+      @font-face {
+    font-family: "Deltarune";
+    src: url("Deltarune.ttf") format("truetype");
+    font-display: swap; 
+  }
+body {
+    margin: 0;
+    background: black;
+    color: white;
+    font-family: "Deltarune", serif;
+    overflow: hidden;
+}
+
+/* текст */
+.word {
+    position: absolute;
+    font-size: 18px;
+    white-space: nowrap;
+    pointer-events: none;
+}
+
+/* шум */
+canvas {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 0;
+}
+
+/* тряска */
+@keyframes shake {
+    0% { transform: translate(0,0); }
+    25% { transform: translate(2px,-2px); }
+    50% { transform: translate(-2px,2px); }
+    75% { transform: translate(2px,2px); }
+    100% { transform: translate(-2px,-2px); }
+}
+
+.shake {
+    animation: shake 0.08s infinite;
+}
+</style>
+
+</head>
+
+<body>
+
+
+ 
+<canvas id="noise"></canvas>
+<audio id="bgMusic" loop>
+    <source src="g.ogg" type="audio/ogg">
+</audio>
+<script>
+    (function() {
+    const audio = document.getElementById('bgMusic');
+        if (audio) {
+            audio.volume = 0.5;
+            // Attempt autoplay with promise catch
+            let playPromise = audio.play();
+            if (playPromise !== undefined) {
+                playPromise.catch(() => {
+                    // autoplay blocked, but any click on page will start music as per requirement (click to write also plays)
+                    const startAudioOnInteraction = function() {
+                        audio.play().catch(e => console.log("audio error"));
+                        document.body.removeEventListener('click', startAudioOnInteraction);
+                    };
+                    document.body.addEventListener('click', startAudioOnInteraction);
+                });
+            }
+        }
+    })();
+const PHRASE = "I REMEMBER WHAT YOU DID";
+
+/* создаём текст по всему экрану */
+const words = [];
+const count = 150;
+
+for (let i = 0; i < count; i++) {
+    let el = document.createElement("div");
+    el.className = "word";
+    el.innerText = PHRASE;
+
+    el.style.left = Math.random() * window.innerWidth + "px";
+    el.style.top = Math.random() * window.innerHeight + "px";
+
+    el.style.fontSize = (12 + Math.random() * 28) + "px";
+
+    document.body.appendChild(el);
+
+    words.push({
+        el: el,
+        glitchPower: Math.random(), // сила глитча
+        speed: 0.02 + Math.random() * 0.1,
+        offset: Math.random() * 1000
+    });
+}
+
+/* символы для глитча */
+const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()_+-=";
+
+/* глитч текста */
+function glitchLoop() {
+    words.forEach(w => {
+        w.offset += w.speed;
+
+        let intensity = Math.abs(Math.sin(w.offset));
+
+        if (Math.random() < w.glitchPower * intensity) {
+            let glitched = "";
+
+            for (let i = 0; i < PHRASE.length; i++) {
+                if (Math.random() < w.glitchPower) {
+                    glitched += chars[Math.floor(Math.random() * chars.length)];
+                } else {
+                    glitched += PHRASE[i];
+                }
+            }
+
+            w.el.innerText = glitched;
+
+            w.el.style.transform =
+                `translate(${Math.random()*10-5}px, ${Math.random()*10-5}px)`;
+
+        } else {
+            w.el.innerText = PHRASE;
+            w.el.style.transform = "none";
+        }
+
+        // иногда добавляем тряску
+        if (Math.random() < 0.01) {
+            w.el.classList.add("shake");
+            setTimeout(() => w.el.classList.remove("shake"), 200);
+        }
+    });
+
+    requestAnimationFrame(glitchLoop);
+}
+glitchLoop();
+
+/* шум (TV noise) */
+const canvas = document.getElementById("noise");
+const ctx = canvas.getContext("2d");
+
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
+
+function noise() {
+    let img = ctx.createImageData(canvas.width, canvas.height);
+    let data = img.data;
+
+    for (let i = 0; i < data.length; i += 4) {
+        let val = Math.random() * 255;
+        data[i] = val;
+        data[i+1] = val;
+        data[i+2] = val;
+        data[i+3] = 30;
+    }
+
+    ctx.putImageData(img, 0, 0);
+}
+setInterval(noise, 40);
+
+/* редкие вспышки */
+
+/* общий "лом" страницы */
+setInterval(() => {
+    document.body.style.transform =
+        `translate(${Math.random()*20-10}px, ${Math.random()*20-10}px)`;
+
+    setTimeout(() => {
+        document.body.style.transform = "none";
+    }, 80);
+}, 20);
+
+/* клик → назад */
+</script>
+
+</body>
+</html>

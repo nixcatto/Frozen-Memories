@@ -1,0 +1,666 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+
+<title>Deltarune: Frozen Memories</title>
+<meta property="og:title" content="Deltarune: Frozen Memories" />
+  <link rel="icon" href="icon.ico" type="image/x-icon">
+
+<meta property="og:description" content="Deltarune chapter like Fangame" />
+
+<meta name="twitter:card" content="https://i.postimg.cc/t4FHSY9M/8-sin-titulo-20251230152628.png">
+
+
+<meta name="theme-color" content="#4284D3">
+<style>
+
+  @font-face {
+    font-family: "Deltarune";
+    src: url("Deltarune.ttf") format("truetype");
+    font-display: swap; 
+  }
+
+  body {
+    margin: 0;
+    font-family: "Deltarune", serif;
+    background: radial-gradient(circle at top, #0b1225, #02040a);
+    color: white;
+    letter-spacing: 1px;
+    overflow-x: hidden;
+
+
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.03); }
+    100% { transform: scale(1); }
+}
+
+.logo {
+    animation: pulse 3s infinite;
+}
+.glitch {
+    position: relative;
+    display: inline-block;
+    font-weight: bold;
+    transition: transform 0.05s;
+}
+
+/* маленькие глитч-квадраты */
+.glitch-box {
+    position: absolute;
+    width: 6px;
+    height: 6px;
+    background: white;
+    pointer-events: none;
+    opacity: 0.8;
+    animation: glitchFade 0.2s forwards;
+}
+
+@keyframes glitchFade {
+    to {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+}
+
+
+/* ❄ снег */
+canvas {
+    position: fixed;
+    top: 0;
+    left: 0;
+    pointer-events: none;
+    z-index: 0;
+}
+
+/* контейнер */
+.content {
+    position: relative;
+    z-index: 2;
+    text-align: center;
+}
+.logo {
+    width: 500px;
+    max-width: 90%;
+    filter: drop-shadow(0 0 20px #00eaff);
+    transition: 0.3s;
+}
+
+.logo:hover {
+    transform: scale(1.05);
+}
+/* header */
+header {
+    padding: 60px 20px;
+}
+
+h1 {
+    font-size: 64px;
+    color: #7fefff;
+    text-shadow: 0 0 20px #00eaff;
+    margin: 0;
+}
+
+.subtitle {
+    opacity: 0.7;
+}
+
+/* секции */
+.section {
+    padding: 60px 20px;
+}
+
+/* карточки */
+.card {
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(0,255,255,0.2);
+    border-radius: 16px;
+    padding: 25px;
+    margin: 20px auto;
+    max-width: 700px;
+    transition: 0.3s;
+}
+
+.card:hover {
+    transform: scale(1.03);
+    box-shadow: 0 0 25px rgba(0,255,255,0.3);
+}
+
+/* кнопки */
+.button {
+    display: inline-block;
+    padding: 14px 28px;
+    background: #00eaff;
+    color: black;
+    border-radius: 10px;
+    text-decoration: none;
+    font-weight: bold;
+    transition: 0.2s;
+}
+
+.button:hover {
+    background: #00bcd4;
+    transform: scale(1.1);
+}
+
+/* галерея */
+.gallery img {
+    width: 260px;
+    margin: 10px;
+    border-radius: 10px;
+    border: 1px solid #00eaff;
+    transition: 0.3s;
+}
+
+.gallery img:hover {
+    transform: scale(1.1);
+}
+
+/* персонажи */
+.characters {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.character {
+    margin: 15px;
+    padding: 20px;
+    background: rgba(255,255,255,0.05);
+    border-radius: 12px;
+    width: 180px;
+    transition: 0.3s;
+}
+
+.character:hover {
+    transform: translateY(-10px);
+}
+#aurora {
+    position: fixed;
+    top: 0;
+    left: 0;
+    pointer-events: none;
+    z-index: 0;
+
+    opacity: 0.55;
+    filter: blur(50px);
+}
+#stars {
+    position: fixed;
+    top: 0;
+    left: 0;
+    pointer-events: none;
+    z-index: 0;
+}
+#shooting {
+    position: fixed;
+    top: 0;
+    left: 0;
+    pointer-events: none;
+    z-index: 1;
+}
+/* черный экран (эффект) */
+#overlay {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    background: black;
+    opacity: 0;
+    pointer-events: none;
+    transition: 1s;
+    z-index: 5;
+}
+
+footer {
+    padding: 20px;
+    opacity: 0.5;
+}
+</style>
+</head>
+
+<body>
+<canvas id="stars"></canvas>
+<canvas id="aurora"></canvas>
+<canvas id="shooting"></canvas>
+<canvas id="snow"></canvas>
+<div id="overlay"></div>
+
+<div class="content">
+
+<header>
+    <img src="logo.png" class="logo">
+    <div class="subtitle">Chapter like Deltarune Fangame</div>
+</header>
+
+<div class="section">
+    <div class="card">
+        <h2>About</h2>
+        <p>
+            What happened after Snowgrave? What was Noelle dreaming about? Will she regain control? Play the game yourself and find out!
+        </p>
+    </div>
+</div>
+
+<div class="section">
+    <div class="card">
+        <h2>Features</h2>
+        <p>* Cool battle backgrounds</p>
+        <p>* New souls</p>
+        <p>* Goofy enemies</p>
+        <p>* Cool cutscenes and amazing effects</p>
+        <p>* Hard and funny boss fights</p>
+        <p class="glitch" id="glitchText" onclick="goGlitch()">* Getting stronger?...</p>
+    </div>
+</div>
+<div class="credits">
+ <div class="card">
+    <h2>Credits</h2>
+        <p>* NixCat - Main Developer, Spriter</p>
+        <p>* GaelFM - Main Spriter</p>
+        <p>* Sylph - Music producer</p>
+        <p>* 8bitboy - Music producer</p>
+        <p>* IMAGE_ENEMY - Idea, Locations plan</p>
+        <p>* Kristal community - assistance with code</p>
+</div>
+</div>
+<div class="links">
+ <div class="card">
+    <h2>Other links</h2>
+        <p>* NixCat's channel - <a href="https://www.youtube.com/@NixCat377">Click here</a></p>
+        <p>* Our discord server - <a href="https://discord.gg/PM9sCEtdYk">Click here</a></p>
+</div>
+</div>
+<div class="section gallery">
+    <h2>Screenshots</h2>
+    <img src="screenshot1.png">
+    <img src="screenshot3.png">
+    <img src="screenshot2.png">
+</div>
+<div class="section">
+    <a class="button" onclick="downloadEffect()">Download</a>
+</div>
+
+<footer>
+    Nix's Studio, Deltarune Frozen Memories
+</footer>
+
+</div>
+
+<audio id="music" loop autoplay preload="auto">
+    <source src="menu.ogg" type="audio/ogg">
+</audio>
+
+<script>
+    function goGlitch() {
+    const overlay = document.getElementById("overlay");
+    overlay.style.opacity = 1;
+
+    setTimeout(() => {
+    window.location.href = "IREMEMBERWHATYOUDID.html";
+    }, 0);
+}
+const aurora = document.getElementById("aurora");
+const actx = aurora.getContext("2d");
+
+aurora.width = window.innerWidth;
+aurora.height = window.innerHeight;
+let waves = [];
+
+for (let i = 0; i < 9; i++) {
+    waves.push({
+        y: 120 + i * 55,
+        amp: 35 + Math.random() * 35,
+        speed: 0.0015 + Math.random() * 0.012,
+        offset: Math.random() * 1000,
+        freq: 0.006 + Math.random() * 0.008,
+        drift: Math.random() * Math.PI * 2,
+        driftSpeed: 0.0006 + Math.random() * 0.0012,
+
+        // 💀 fade
+        fadePhase: Math.random() * Math.PI * 2,
+        fadeSpeed: 0.0015 + Math.random() * 0.008
+    });
+}
+
+let auroraTime = 0;
+
+function drawAurora() {
+    auroraTime += 0.0009;
+
+    actx.clearRect(0, 0, aurora.width, aurora.height);
+    actx.globalCompositeOperation = "lighter";
+
+    // чуть меньше blur → больше яркости
+    actx.filter = "blur(8px)";
+
+    waves.forEach((wave, i) => {
+        wave.offset += wave.speed;
+        wave.fadePhase += wave.fadeSpeed;
+        wave.drift += wave.driftSpeed;
+
+        let time = auroraTime;
+
+        // те же цвета
+        let r = 33 + Math.sin(time + i) * 20;
+        let g = 3 + Math.sin(time + i + 1) * 5;
+        let b = 22 + Math.sin(time + i + 2) * 15;
+
+        // 🔥 увеличили яркость
+        let alpha = 0.25 + (Math.sin(wave.fadePhase) * 0.2);
+        if (alpha < 0.08) alpha = 0.08;
+
+        let gradient = actx.createLinearGradient(0, 0, 0, aurora.height);
+        gradient.addColorStop(0, `rgba(${r},${g},${b},0)`);
+        gradient.addColorStop(0.45, `rgba(${r},${g},${b},${alpha})`);
+        gradient.addColorStop(0.55, `rgba(${r},${g},${b},${alpha})`);
+        gradient.addColorStop(1, `rgba(${r},${g},${b},0)`);
+
+        actx.fillStyle = gradient;
+
+        actx.beginPath();
+
+        let dynamicAmp = wave.amp + Math.sin(time + i) * 25;
+
+        let verticalShift =
+            Math.sin(wave.drift) * 55 +
+            Math.sin(time * 0.7 + i) * 30;
+
+        for (let x = 0; x <= aurora.width; x += 3) {
+            let y =
+                wave.y +
+                verticalShift +
+                Math.sin(x * wave.freq + wave.offset) * dynamicAmp +
+                Math.sin(x * 0.012 + time * 1.4 + i) * 20 +
+                Math.sin(x * 0.03 + time * 2.0) * 8;
+
+            actx.lineTo(x, y);
+        }
+
+        actx.lineTo(aurora.width, aurora.height);
+        actx.lineTo(0, aurora.height);
+        actx.closePath();
+
+        actx.fill();
+
+        // 🔥 усиливаем свечение
+        actx.globalAlpha = 0.35;
+        actx.fill();
+        actx.globalAlpha = 1;
+    });
+
+    actx.filter = "none";
+
+    requestAnimationFrame(drawAurora);
+}
+drawAurora();
+
+/* ⭐ звёзды */
+const starsCanvas = document.getElementById("stars");
+const sctx = starsCanvas.getContext("2d");
+
+starsCanvas.width = window.innerWidth;
+starsCanvas.height = window.innerHeight;
+
+let stars = [];
+const starCount = Math.floor((starsCanvas.width * starsCanvas.height) / 6000);
+
+for (let i = 0; i < starCount; i++) {
+    stars.push({
+        x: Math.random() * starsCanvas.width,
+        y: Math.random() * starsCanvas.height,
+        r: Math.random() * 1.2 + 0.3,
+        baseAlpha: 0.4 + Math.random() * 0.5,
+        twinkle: Math.random() * Math.PI * 2,
+        twinkleSpeed: 0.01 + Math.random() * 0.04,
+        hue: Math.random() < 0.85 ? 0 : (Math.random() < 0.5 ? 1 : 2)
+    });
+}
+
+function drawStars() {
+    sctx.clearRect(0, 0, starsCanvas.width, starsCanvas.height);
+
+    for (let s of stars) {
+        s.twinkle += s.twinkleSpeed;
+        let a = s.baseAlpha * (0.55 + Math.sin(s.twinkle) * 0.45);
+        if (a < 0) a = 0;
+
+        let color;
+        if (s.hue === 1) color = `rgba(180, 220, 255, ${a})`;
+        else if (s.hue === 2) color = `rgba(255, 220, 200, ${a})`;
+        else color = `rgba(255, 255, 255, ${a})`;
+
+        sctx.fillStyle = color;
+        sctx.beginPath();
+        sctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
+        sctx.fill();
+
+        if (s.r > 1) {
+            sctx.fillStyle = `rgba(255,255,255,${a * 0.15})`;
+            sctx.beginPath();
+            sctx.arc(s.x, s.y, s.r * 2.4, 0, Math.PI * 2);
+            sctx.fill();
+        }
+    }
+
+    requestAnimationFrame(drawStars);
+}
+drawStars();
+
+/* 🌠 падающие звёзды */
+const shooting = document.getElementById("shooting");
+const shctx = shooting.getContext("2d");
+
+shooting.width = window.innerWidth;
+shooting.height = window.innerHeight;
+
+let shootingStars = [];
+
+function spawnShootingStar() {
+    const startX = Math.random() * shooting.width * 0.8;
+    const startY = Math.random() * shooting.height * 0.4;
+    const angle = Math.PI / 4 + (Math.random() - 0.5) * 0.4;
+    const speed = 9 + Math.random() * 6;
+    shootingStars.push({
+        x: startX,
+        y: startY,
+        vx: Math.cos(angle) * speed,
+        vy: Math.sin(angle) * speed,
+        life: 1,
+        decay: 0.012 + Math.random() * 0.012,
+        length: 120 + Math.random() * 120
+    });
+}
+
+function drawShooting() {
+    shctx.clearRect(0, 0, shooting.width, shooting.height);
+
+    for (let i = shootingStars.length - 1; i >= 0; i--) {
+        let s = shootingStars[i];
+        s.x += s.vx;
+        s.y += s.vy;
+        s.life -= s.decay;
+
+        if (s.life <= 0 || s.x > shooting.width + 200 || s.y > shooting.height + 200) {
+            shootingStars.splice(i, 1);
+            continue;
+        }
+
+        let tailX = s.x - (s.vx / Math.hypot(s.vx, s.vy)) * s.length;
+        let tailY = s.y - (s.vy / Math.hypot(s.vx, s.vy)) * s.length;
+
+        let grad = shctx.createLinearGradient(s.x, s.y, tailX, tailY);
+        grad.addColorStop(0, `rgba(255, 255, 255, ${s.life})`);
+        grad.addColorStop(0.4, `rgba(180, 220, 255, ${s.life * 0.5})`);
+        grad.addColorStop(1, `rgba(180, 220, 255, 0)`);
+
+        shctx.strokeStyle = grad;
+        shctx.lineWidth = 2;
+        shctx.lineCap = "round";
+        shctx.beginPath();
+        shctx.moveTo(s.x, s.y);
+        shctx.lineTo(tailX, tailY);
+        shctx.stroke();
+
+        shctx.fillStyle = `rgba(255,255,255,${s.life})`;
+        shctx.beginPath();
+        shctx.arc(s.x, s.y, 1.8, 0, Math.PI * 2);
+        shctx.fill();
+    }
+
+    requestAnimationFrame(drawShooting);
+}
+drawShooting();
+
+function scheduleShootingStar() {
+    spawnShootingStar();
+    setTimeout(scheduleShootingStar, 3000 + Math.random() * 6000);
+}
+setTimeout(scheduleShootingStar, 1500);
+
+window.addEventListener("resize", () => {
+    aurora.width = window.innerWidth;
+    aurora.height = window.innerHeight;
+    starsCanvas.width = window.innerWidth;
+    starsCanvas.height = window.innerHeight;
+    shooting.width = window.innerWidth;
+    shooting.height = window.innerHeight;
+
+    for (let s of stars) {
+        if (s.x > starsCanvas.width) s.x = Math.random() * starsCanvas.width;
+        if (s.y > starsCanvas.height) s.y = Math.random() * starsCanvas.height;
+    }
+});
+const textEl = document.getElementById("glitchText");
+const originalText = textEl.innerText;
+
+const chars = "!@#$%^&*()_+-=<>?/[]{}IREMEMBERWHATYOUDID";
+
+function glitchText() {
+    if (Math.random() < 0.3) {
+
+        let glitched = "";
+
+        for (let i = 0; i < originalText.length; i++) {
+            if (Math.random() < 0.2) {
+                glitched += chars[Math.floor(Math.random() * chars.length)];
+            } else {
+                glitched += originalText[i];
+            }
+        }
+
+        textEl.innerText = glitched;
+
+        textEl.style.transform = `translate(${Math.random()*6-3}px, ${Math.random()*6-3}px)`;
+
+        for (let i = 0; i < 5; i++) {
+            let box = document.createElement("div");
+            box.className = "glitch-box";
+
+            box.style.left = Math.random() * textEl.offsetWidth + "px";
+            box.style.top = Math.random() * textEl.offsetHeight + "px";
+
+            textEl.appendChild(box);
+            setTimeout(() => box.remove(), 200);
+        }
+
+        setTimeout(() => {
+            textEl.innerText = originalText;
+            textEl.style.transform = "none";
+        }, 80);
+    }
+}
+
+setInterval(glitchText, 100);
+/* ❄ снег */
+const canvas = document.getElementById("snow");
+const ctx = canvas.getContext("2d");
+
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
+
+let snowflakes = [];
+
+for (let i = 0; i < 120; i++) {
+    snowflakes.push({
+        x: Math.random() * canvas.width,
+        y: Math.random() * canvas.height,
+        r: Math.random() * 3 + 1,
+        d: Math.random() * 1
+    });
+}
+function resizeCanvas() {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+    // ❄ ВАЖНО: не пересоздаём снег полностью,
+    // а просто ограничиваем координаты
+    for (let f of snowflakes) {
+        if (f.x > canvas.width) f.x = Math.random() * canvas.width;
+        if (f.y > canvas.height) f.y = Math.random() * canvas.height;
+    }
+}
+
+window.addEventListener("resize", resizeCanvas);
+function drawSnow() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.fillStyle = "white";
+    ctx.beginPath();
+
+    for (let i = 0; i < snowflakes.length; i++) {
+        let f = snowflakes[i];
+        ctx.moveTo(f.x, f.y);
+        ctx.arc(f.x, f.y, f.r, 0, Math.PI * 2, true);
+    }
+
+    ctx.fill();
+    updateSnow();
+}
+
+function updateSnow() {
+    for (let i = 0; i < snowflakes.length; i++) {
+        let f = snowflakes[i];
+        f.y += Math.pow(f.d, 2) + 1;
+        if (f.y > canvas.height) {
+            snowflakes[i] = {
+                x: Math.random() * canvas.width,
+                y: 0,
+                r: f.r,
+                d: f.d
+            };
+        }
+    }
+}
+
+setInterval(drawSnow, 25);
+
+/* 🎵 музыка */
+const music = document.getElementById("music");
+music.volume = 0.5;
+
+const tryPlay = () => music.play().catch(() => {});
+tryPlay();
+
+const startOnInteraction = () => {
+    tryPlay();
+    document.removeEventListener("click", startOnInteraction);
+    document.removeEventListener("keydown", startOnInteraction);
+    document.removeEventListener("touchstart", startOnInteraction);
+};
+document.addEventListener("click", startOnInteraction);
+document.addEventListener("keydown", startOnInteraction);
+document.addEventListener("touchstart", startOnInteraction);
+
+/* 🌑 эффект скачивания */
+function downloadEffect() {
+    const overlay = document.getElementById("overlay");
+    overlay.style.opacity = 1;
+
+    setTimeout(() => {
+        window.location.href = "https://gamejolt.com/games/frozen-memories/1059394";
+    }, 1000);
+}
+</script>
+
+</body>
+</html>
