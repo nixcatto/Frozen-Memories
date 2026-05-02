@@ -292,6 +292,14 @@ footer {
 </audio>
 
 <script>
+    const FPS = 120;
+let lastFrame = 0;
+const isLowEnd = navigator.hardwareConcurrency <= 4;
+function shouldRender(now) {
+    if (now - lastFrame < 1000 / FPS) return false;
+    lastFrame = now;
+    return true;
+}
     function goGlitch() {
     const overlay = document.getElementById("overlay");
     overlay.style.opacity = 1;
@@ -307,7 +315,7 @@ aurora.width = window.innerWidth;
 aurora.height = window.innerHeight;
 let waves = [];
 
-for (let i = 0; i < 9; i++) {
+for (let i = 0; i < (isLowEnd ? 6 : 9); i++) {
     waves.push({
         y: 120 + i * 55,
         amp: 35 + Math.random() * 35,
@@ -325,14 +333,18 @@ for (let i = 0; i < 9; i++) {
 
 let auroraTime = 0;
 
-function drawAurora() {
+function drawAurora(now = 0) {
+    if (!shouldRender(now)) {
+        requestAnimationFrame(drawAurora);
+        return;
+    }
     auroraTime += 0.0009;
 
     actx.clearRect(0, 0, aurora.width, aurora.height);
     actx.globalCompositeOperation = "lighter";
 
     // чуть меньше blur → больше яркости
-    actx.filter = "blur(8px)";
+    actx.filter = "blur(4px)";
 
     waves.forEach((wave, i) => {
         wave.offset += wave.speed;
@@ -366,7 +378,7 @@ function drawAurora() {
             Math.sin(wave.drift) * 55 +
             Math.sin(time * 0.7 + i) * 30;
 
-        for (let x = 0; x <= aurora.width; x += 3) {
+        for (let x = 0; x <= aurora.width; x += 5) {
             let y =
                 wave.y +
                 verticalShift +
@@ -391,7 +403,8 @@ function drawAurora() {
 
     actx.filter = "none";
 
-    requestAnimationFrame(drawAurora);
+        requestAnimationFrame(drawAurora);
+    
 }
 drawAurora();
 
@@ -403,7 +416,7 @@ starsCanvas.width = window.innerWidth;
 starsCanvas.height = window.innerHeight;
 
 let stars = [];
-const starCount = Math.floor((starsCanvas.width * starsCanvas.height) / 6000);
+const starCount = Math.floor((starsCanvas.width * starsCanvas.height) / 12000);
 
 for (let i = 0; i < starCount; i++) {
     stars.push({
@@ -581,7 +594,7 @@ canvas.height = window.innerHeight;
 
 let snowflakes = [];
 
-for (let i = 0; i < 120; i++) {
+for (let i = 0; i < (isLowEnd ? 60 : 120); i++) {
     snowflakes.push({
         x: Math.random() * canvas.width,
         y: Math.random() * canvas.height,
@@ -632,7 +645,11 @@ function updateSnow() {
     }
 }
 
-setInterval(drawSnow, 25);
+function snowLoop() {
+    drawSnow();
+    requestAnimationFrame(snowLoop);
+}
+snowLoop();
 
 /* 🎵 музыка */
 const music = document.getElementById("music");
