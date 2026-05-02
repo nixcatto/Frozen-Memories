@@ -459,7 +459,11 @@ function drawStars() {
     requestAnimationFrame(drawStars);
 }
 drawStars();
+let isTabActive = true;
 
+document.addEventListener("visibilitychange", () => {
+    isTabActive = !document.hidden;
+});
 /* 🌠 падающие звёзды */
 const shooting = document.getElementById("shooting");
 const shctx = shooting.getContext("2d");
@@ -526,11 +530,20 @@ function drawShooting() {
 drawShooting();
 
 function scheduleShootingStar() {
-    spawnShootingStar();
+    if (isTabActive) {
+        spawnShootingStar();
+    }
+
     setTimeout(scheduleShootingStar, 3000 + Math.random() * 6000);
 }
 setTimeout(scheduleShootingStar, 1500);
+document.addEventListener("visibilitychange", () => {
+    isTabActive = !document.hidden;
 
+    if (!isTabActive) {
+        shootingStars = []; // чистим всё 💀
+    }
+});
 window.addEventListener("resize", () => {
     aurora.width = window.innerWidth;
     aurora.height = window.innerHeight;
