@@ -46,7 +46,7 @@
     transition: transform 0.05s;
 }
 
-/* маленькие глитч-квадраты */
+
 .glitch-box {
     position: absolute;
     width: 6px;
@@ -65,7 +65,7 @@
 }
 
 
-/* ❄ снег */
+
 canvas {
     position: fixed;
     top: 0;
@@ -74,7 +74,7 @@ canvas {
     z-index: 0;
 }
 
-/* контейнер */
+
 .content {
     position: relative;
     z-index: 2;
@@ -90,7 +90,7 @@ canvas {
 .logo:hover {
     transform: scale(1.05);
 }
-/* header */
+
 header {
     padding: 60px 20px;
 }
@@ -106,12 +106,12 @@ h1 {
     opacity: 0.7;
 }
 
-/* секции */
+
 .section {
     padding: 60px 20px;
 }
 
-/* карточки */
+
 .card {
     background: rgba(255,255,255,0.05);
     border: 1px solid rgba(0,255,255,0.2);
@@ -127,7 +127,7 @@ h1 {
     box-shadow: 0 0 25px rgba(0,255,255,0.3);
 }
 
-/* кнопки */
+
 .button {
     display: inline-block;
     padding: 14px 28px;
@@ -144,7 +144,7 @@ h1 {
     transform: scale(1.1);
 }
 
-/* галерея */
+
 .gallery img {
     width: 260px;
     margin: 10px;
@@ -157,7 +157,7 @@ h1 {
     transform: scale(1.1);
 }
 
-/* персонажи */
+
 .characters {
     display: flex;
     justify-content: center;
@@ -200,7 +200,7 @@ h1 {
     pointer-events: none;
     z-index: 1;
 }
-/* черный экран (эффект) */
+
 #overlay {
     position: fixed;
     width: 100%;
@@ -327,7 +327,7 @@ for (let i = 0; i < (isLowEnd ? 6 : 9); i++) {
         drift: Math.random() * Math.PI * 2,
         driftSpeed: 0.0006 + Math.random() * 0.0012,
 
-        // 💀 fade
+    
         fadePhase: Math.random() * Math.PI * 2,
         fadeSpeed: 0.0015 + Math.random() * 0.008
     });
@@ -345,7 +345,7 @@ function drawAurora(now = 0) {
     actx.clearRect(0, 0, aurora.width, aurora.height);
     actx.globalCompositeOperation = "lighter";
 
-    // чуть меньше blur → больше яркости
+   
     actx.filter = "blur(4px)";
 
     waves.forEach((wave, i) => {
@@ -355,12 +355,12 @@ function drawAurora(now = 0) {
 
         let time = auroraTime;
 
-        // те же цвета
+       
         let r = 33 + Math.sin(time + i) * 20;
         let g = 3 + Math.sin(time + i + 1) * 5;
         let b = 22 + Math.sin(time + i + 2) * 15;
 
-        // 🔥 увеличили яркость
+    
         let alpha = 0.25 + (Math.sin(wave.fadePhase) * 0.2);
         if (alpha < 0.08) alpha = 0.08;
 
@@ -397,7 +397,7 @@ function drawAurora(now = 0) {
 
         actx.fill();
 
-        // 🔥 усиливаем свечение
+   
         actx.globalAlpha = 0.35;
         actx.fill();
         actx.globalAlpha = 1;
@@ -410,7 +410,7 @@ function drawAurora(now = 0) {
 }
 drawAurora();
 
-/* ⭐ звёзды */
+
 const starsCanvas = document.getElementById("stars");
 const sctx = starsCanvas.getContext("2d");
 
@@ -466,7 +466,7 @@ let isTabActive = true;
 document.addEventListener("visibilitychange", () => {
     isTabActive = !document.hidden;
 });
-/* 🌠 падающие звёзды */
+
 const shooting = document.getElementById("shooting");
 const shctx = shooting.getContext("2d");
 
@@ -543,7 +543,7 @@ document.addEventListener("visibilitychange", () => {
     isTabActive = !document.hidden;
 
     if (!isTabActive) {
-        shootingStars = []; // чистим всё 💀
+        shootingStars = []; 
     }
 });
 window.addEventListener("resize", () => {
@@ -600,7 +600,7 @@ function glitchText() {
 }
 
 setInterval(glitchText, 100);
-/* ❄ снег */
+
 const canvas = document.getElementById("snow");
 const ctx = canvas.getContext("2d");
 
@@ -621,8 +621,6 @@ function resizeCanvas() {
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
 
-    // ❄ ВАЖНО: не пересоздаём снег полностью,
-    // а просто ограничиваем координаты
     for (let f of snowflakes) {
         if (f.x > canvas.width) f.x = Math.random() * canvas.width;
         if (f.y > canvas.height) f.y = Math.random() * canvas.height;
@@ -666,7 +664,7 @@ function snowLoop() {
 }
 snowLoop();
 
-/* 🎵 музыка */
+
 const music = document.getElementById("music");
 music.volume = 0.5;
 
@@ -683,7 +681,7 @@ document.addEventListener("click", startOnInteraction);
 document.addEventListener("keydown", startOnInteraction);
 document.addEventListener("touchstart", startOnInteraction);
 
-/* 🌑 эффект скачивания */
+
 function downloadEffect() {
     const overlay = document.getElementById("overlay");
     overlay.style.opacity = 1;
